@@ -44,9 +44,10 @@ class TipoCambioTest {
   @Test
   @DisplayName("4. Monto sobre el límite lanza BusinessRuleException")
   void montoSobreElLimiteLanzaExcepcion() {
+    BigDecimal montoExcedido = new BigDecimal("10000.01");
     BusinessRuleException ex = assertThrows(
             BusinessRuleException.class,
-            () -> tipoCambioUsd.convertir(Operacion.COMPRA, new BigDecimal("10000.01"))
+            () -> tipoCambioUsd.convertir(Operacion.COMPRA, montoExcedido)
     );
     assertEquals("El monto supera el límite de 10000.00 por operación", ex.getMessage());
   }
@@ -64,13 +65,21 @@ class TipoCambioTest {
   @Test
   @DisplayName("6. Datos inválidos al construir TipoCambio lanza IllegalArgumentException")
   void datosInvalidosAlConstruirLanzaExcepcion() {
+    BigDecimal compraValida = new BigDecimal("3.712");
+    BigDecimal ventaValida = new BigDecimal("3.786");
+
     // Moneda en minúsculas
-    assertThrows(IllegalArgumentException.class, () -> new TipoCambio("usd", new BigDecimal("3.712"), new BigDecimal("3.786")));
+    assertThrows(IllegalArgumentException.class, () -> new TipoCambio("usd", compraValida, ventaValida));
+
+    BigDecimal compraCero = BigDecimal.ZERO;
 
     // Compra en 0
-    assertThrows(IllegalArgumentException.class, () -> new TipoCambio("USD", BigDecimal.ZERO, new BigDecimal("3.786")));
+    assertThrows(IllegalArgumentException.class, () -> new TipoCambio("USD", compraCero, ventaValida));
+
+    BigDecimal compraMayor = new BigDecimal("3.786");
+    BigDecimal ventaMenor = new BigDecimal("3.712");
 
     // Venta igual o menor que compra
-    assertThrows(IllegalArgumentException.class, () -> new TipoCambio("USD", new BigDecimal("3.786"), new BigDecimal("3.712")));
+    assertThrows(IllegalArgumentException.class, () -> new TipoCambio("USD", compraMayor, ventaMenor));
   }
 }
