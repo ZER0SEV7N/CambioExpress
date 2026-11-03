@@ -1,6 +1,6 @@
 package com.nttdata.cambioexpress.infrastructure.adapter.in.rest;
 
-import com.nttdata.cambioexpress.domain.exception.ResourceNotFound;
+import com.nttdata.cambioexpress.domain.exception.ResourceNotFoundException;
 import com.nttdata.cambioexpress.domain.exception.BusinessRuleException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +12,8 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-  @ExceptionHandler(ResourceNotFound.class)
-  public ResponseEntity<Map<String, String>> handleNotFound(ResourceNotFound ex) {
+  @ExceptionHandler(ResourceNotFoundException.class)
+  public ResponseEntity<Map<String, String>> handleNotFound(ResourceNotFoundException ex) {
     return ResponseEntity.status(HttpStatus.NOT_FOUND)
             .body(Map.of("error", ex.getMessage()));
   }

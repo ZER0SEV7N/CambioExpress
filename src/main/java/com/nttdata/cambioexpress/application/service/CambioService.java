@@ -1,6 +1,6 @@
 package com.nttdata.cambioexpress.application.service;
 
-import com.nttdata.cambioexpress.domain.exception.ResourceNotFound;
+import com.nttdata.cambioexpress.domain.exception.ResourceNotFoundException;
 import com.nttdata.cambioexpress.domain.model.Cotizacion;
 import com.nttdata.cambioexpress.domain.model.Operacion;
 import com.nttdata.cambioexpress.domain.model.TipoCambio;
@@ -34,7 +34,7 @@ public class CambioService implements CambioUseCase {
   public TipoCambio obtenerTipoCambio(String moneda) {
     String codigo = moneda == null ? "" : moneda.toUpperCase();
     return tipoCambioRepository.findByMoneda(codigo)
-            .orElseThrow(() -> new ResourceNotFound("Moneda no soportada: " + moneda));
+            .orElseThrow(() -> new ResourceNotFoundException("Moneda no soportada: " + moneda));
   }
 
   @Override
@@ -58,6 +58,6 @@ public class CambioService implements CambioUseCase {
   @Override
   public Cotizacion obtenerCotizacion(String id) {
     return cotizacionRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFound("Cotización no encontrada: " + id));
+            .orElseThrow(() -> new ResourceNotFoundException("Cotización no encontrada: " + id));
   }
 }
